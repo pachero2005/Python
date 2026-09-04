@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo Maestro: 20 Botones Interactivos (CSS + JS)</title>
+    <style>
+        /* --- ESTILOS GLOBALES --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #090d16;
+            color: #f8fafc;
+            padding: 40px 20px 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            max-width: 800px;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #38bdf8, #818cf8, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 12px;
+        }
+
+        p.subtitle {
+            color: #94a3b8;
+            font-size: 1.05rem;
+            line-height: 1.5;
+        }
+
+        /* Rejilla de exhibición */
+        .grid-botones {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 25px;
+            max-width: 1300px;
+            width: 100%;
+        }
+
+        .caja-boton {
+            background: #111827;
+            border: 1px solid #1f2937;
+            border-radius: 16px;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 18px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            transition: border-color 0.3s;
+        }
+
+        .caja-boton:hover {
+            border-color: #374151;
+        }
+
+        .caja-boton span {
+            font-size: 0.82rem;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        /* --- BASE DE LOS BOTONES --- */
+        .btn {
+            padding: 14px 28px;
+            font-size: 15px;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            position: relative;
+            background: #ffffff;
+            color: #111827;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+            user-select: none;
+            outline: none;
+        }
+
+        /* ==========================================
+           BLOQUE 1: EFECTOS CSS PUROS (1 a 10)
+           ========================================== */
+
+        /* 1. Elevación 3D */
+        .btn-1 { background: #3b82f6; color: white; box-shadow: 0 5px 0 #1d4ed8; transition: all 0.1s ease; }
+        .btn-1:hover { transform: translateY(2px); box-shadow: 0 3px 0 #1d4ed8; }
+        .btn-1:active { transform: translateY(5px); box-shadow: 0 0 0 #1d4ed8; }
+
+        /* 2. Brillo Flash (Shimmer) */
+        .btn-2 { background: #10b981; color: white; overflow: hidden; }
+        .btn-2::after { content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent); transform: skewX(-25deg); }
+        .btn-2:hover::after { left: 150%; transition: left 0.6s ease-in-out; }
+
+        /* 3. Relleno Deslizante Lateral */
+        .btn-3 { background: transparent; color: #ef4444; border: 2px solid #ef4444; overflow: hidden; z-index: 1; transition: color 0.3s; }
+        .btn-3::before { content: ''; position: absolute; top: 0; left: 0; width: 0; height: 100%; background: #ef4444; z-index: -1; transition: width 0.3s ease; }
+        .btn-3:hover { color: white; }
+        .btn-3:hover::before { width: 100%; }
+
+        /* 4. Expansión Central Radial */
+        .btn-4 { background: transparent; color: #f59e0b; border: 2px solid #f59e0b; overflow: hidden; z-index: 1; transition: color 0.3s; }
+        .btn-4::before { content: ''; position: absolute; top: 50%; left: 50%; width: 0; height: 0; background: #f59e0b; z-index: -1; border-radius: 50%; transform: translate(-50%, -50%); transition: width 0.4s, height 0.4s; }
+        .btn-4:hover { color: #000; }
+        .btn-4:hover::before { width: 300px; height: 300px; }
+
+        /* 5. Neón Pulsante */
+        .btn-5 { background: transparent; color: #a855f7; border: 2px solid #a855f7; border-radius: 50px; transition: all 0.3s; }
+        .btn-5:hover { background: #a855f7; color: white; box-shadow: 0 0 15px #a855f7, 0 0 30px #a855f7; transform: scale(1.05); }
+
+        /* 6. Borde Dibujado Perimetral */
+        .btn-6 { background: transparent; color: #ec4899; position: relative; }
+        .btn-6::before, .btn-6::after { content: ''; position: absolute; width: 0; height: 0; border: 2px solid transparent; }
+        .btn-6::before { top: 0; left: 0; }
+        .btn-6::after { bottom: 0; right: 0; }
+        .btn-6:hover::before { width: 100%; height: 100%; border-top-color: #ec4899; border-right-color: #ec4899; transition: width 0.15s ease, height 0.15s ease 0.15s; }
+        .btn-6:hover::after { width: 100%; height: 100%; border-bottom-color: #ec4899; border-left-color: #ec4899; transition: width 0.15s ease 0.3s, height 0.15s ease 0.45s; }
+
+        /* 7. Gradiente Animado Continuo */
+        .btn-7 { background: linear-gradient(45deg, #ff4e50, #f9d423, #ff4e50); background-size: 200% auto; color: white; transition: 0.5s; }
+        .btn-7:hover { background-position: right center; }
+
+        /* 8. Escala y Rotación */
+        .btn-8 { background: #06b6d4; color: white; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .btn-8:hover { transform: scale(1.1) rotate(3deg); }
+
+        /* 9. Glassmorphism */
+        .btn-9 { background: rgba(255, 255, 255, 0.05); color: #fff; border: 1px solid rgba(255,255,255,0.15); backdrop-filter: blur(8px); transition: all 0.3s; }
+        .btn-9:hover { background: rgba(255, 255, 255, 0.2); border-color: rgba(255,255,255,0.4); }
+
+        /* 10. Desplazamiento de Texto Vertical */
+        .btn-10 { background: #14b8a6; color: white; overflow: hidden; height: 48px; }
+        .btn-10 .txt { transition: transform 0.3s ease; }
+        .btn-10::after { content: '¡HOVER OK!'; position: absolute; left: 0; right: 0; top: 100%; transition: top 0.3s ease; text-align: center; }
+        .btn-10:hover .txt { transform: translateY(-40px); }
+        .btn-10:hover::after { top: 13px; }
+
+
+        /* ==========================================
+           BLOQUE 2: EFECTOS CON JAVASCRIPT (11 a 20)
+           ========================================== */
+
+        /* 11. Ondas Ripple (Material Design) */
+        .btn-11 { background: #6366f1; color: white; overflow: hidden; }
+        .ripple { position: absolute; background: rgba(255, 255, 255, 0.5); border-radius: 50%; transform: scale(0); animation: ripple-anim 0.6s linear; pointer-events: none; }
+        @keyframes ripple-anim { to { transform: scale(4); opacity: 0; } }
+
+        /* 12. Rastreo de Cursor (Spotlight JS) */
+        .btn-12 { background: #1f2937; color: white; overflow: hidden; border: 1px solid #374151; }
+        .btn-12::before { content: ''; position: absolute; top: var(--y, 50%); left: var(--x, 50%); width: 0px; height: 0px; background: radial-gradient(circle, rgba(236,72,153,0.6) 0%, transparent 70%); transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s; }
+        .btn-12:hover::before { width: 180px; height: 180px; }
+
+        /* 13. Explosión de Partículas al Hacer Clic */
+        .btn-13 { background: #f43f5e; color: white; }
+        .particle { position: fixed; border-radius: 50%; pointer-events: none; z-index: 9999; animation: pop 0.6s ease-out forwards; }
+        @keyframes pop {
+            0% { transform: translate(0, 0) scale(1); opacity: 1; }
+            100% { transform: translate(var(--dx), var(--dy)) scale(0); opacity: 0; }
+        }
+
+        /* 14. Estado de Carga (Spinner JS) */
+        .btn-14 { background: #334155; color: white; transition: all 0.3s; }
+        .btn-14.loading { color: transparent; pointer-events: none; }
+        .btn-14.loading::after { content: ""; position: absolute; width: 20px; height: 20px; border: 3px solid transparent; border-top-color: white; border-radius: 50%; animation: spin 0.8s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* 15. Inclinación 3D (Tilt Effect) */
+        .btn-15 { background: #8b5cf6; color: white; transform-style: preserve-3d; transition: transform 0.1s ease-out; }
+
+        /* 16. Magnetismo al Cursor */
+        .btn-16 { background: #0284c7; color: white; transition: transform 0.2s ease-out; }
+
+        /* 17. Confirmación con Checkmark Animado */
+        .btn-17 { background: #16a34a; color: white; transition: all 0.3s; }
+        .btn-17.success { background: #15803d; }
+
+        /* 18. Sonido de Clic Sintetizado (Web Audio API) */
+        .btn-18 { background: #d97706; color: white; }
+        .btn-18:active { transform: scale(0.95); }
+
+        /* 19. Copiado al Portapapeles */
+        .btn-19 { background: #4f46e5; color: white; }
+
+        /* 20. Contador Incremental de Clics */
+        .btn-20 { background: #db2777; color: white; }
+        .badge { background: rgba(255,255,255,0.2); padding: 2px 8px; border-radius: 12px; font-size: 0.85em; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Catálogo de 20 Botones Interactivos</h1>
+        <p class="subtitle">Efectos CSS puros y animaciones avanzadas potenciadas con JavaScript</p>
+    </header>
+
+    <div class="grid-botones">
+
+        <!-- --- BLOQUE CSS PURO --- -->
+        <div class="caja-boton">
+            <button class="btn btn-1">Elevación 3D</button>
+            <span>01. CSS Depth Push</span>
+        </div>
+
+        <div class="caja-boton">
+            <button class="btn btn-2">Brillo Flash</button>
+            <span>02. CSS Shimmer</span>
+        </div>
+
+        <div class="caja-boton">
+            <button class="btn btn-3">Relleno Lateral</button>
+            <span>03. CSS Slide In</span>
+        </div>
+
+        <div class="caja-boton">
+            <button class="btn btn-4">Expansión Central</button>
+            <span>04. CSS Radial Expansion</span>
+        </div>
+
+        <div class="caja-boton">
+            <button class="btn btn-5">Modo Neón</button>
+            <span>05. CSS Glow Pulse</span>
+        </div>
+
+        <div class="caja-boton">
+            <button class="btn btn-6">Borde Dibujado</button>
+            <span>06. CSS Border Draw</span>
+        </div>
+
+        <div class="caja-boton">
+            <button class="btn btn-7">Gradiente Vivo</button>
+            <span>07. CSS Gradient Move</span>
+        </div>
+
+        <div class="caja-boton">
+            <button class="btn btn-8">Escala y Giro</button>
+            <span>08. CSS Pop & Rotate</span>
+        </div>
+
+        <div class="caja-boton">
+            <button class="btn btn-9">Efecto Cristal</button>
+            <span>09. CSS Glassmorphism</span>
+        </div>
+
+        <div class="caja-boton">
+            <button class="btn btn-10"><span class="txt">Pásame el Cursor</span></button>
+            <span>10. CSS Text Shift</span>
+        </div>
+
+
+        <!-- --- BLOQUE JAVASCRIPT --- -->
+        <div class="caja-boton">
+            <button class="btn btn-11" id="btn-ripple">Onda Material</button>
+            <span>11. JS Material Ripple</span>
+        </div>
+
+        <div class="caja-boton">
+            <button class="btn btn-12" id="btn-spotlight">Rastreador Luz</button>
+            <span>12. JS Cursor Spotlight</span>
+        </div>
+
+        <div class="caja-boton">
+            <button class="btn btn-13" id="btn-particles">¡Partículas!</button>
+            <span>13. JS Particle Pop</span>
+        </div>
+
+        <div class="caja-boton">
+            <button class="btn btn-14" id="btn-loading">Procesar Pago</button>
+            <span>14. JS State Spinner</span>
+        </div>
+
+        <div class="caja-boton">
+            <button class="btn btn-15" id="btn-tilt">Inclinación 3D</button>
+            <span>15. JS 3D Parallax Tilt</span>
+        </div>
+
+        <div class="caja-boton">
+            <button class="btn btn-16" id="btn-magnetic">Imán Cursor</button>
+            <span>16. JS Magnetic Effect</span>
+        </div>
+
+        <div class="caja-boton">
+            <button class="btn btn-17" id="btn-success">Guardar Datos</button>
+            <span>17. JS Check Feedback</span>
+        </div>
+
+        <div class="caja-boton">
+            <button class="btn btn-18" id="btn-sound">Sonido Clic</button>
+            <span>18. JS Web Audio Synth</span>
+        </div>
+
+        <div class="caja-boton">
+            <button class="btn btn-19" id="btn-copy">Copiar Enlace</button>
+            <span>19. JS Clipboard API</span>
+        </div>
+
+        <div class="caja-boton">
+            <button class="btn btn-20" id="btn-counter">Me Gusta <span class="badge" id="count">0</span></button>
+            <span>20. JS Click Counter</span>
+        </div>
+
+    </div>
+
+    <script>
+        // 11. Ripple Effect (Material Design)
+        document.getElementById('btn-ripple').addEventListener('click', function(e) {
+            const btn = e.currentTarget;
+            const circle = document.createElement('span');
+            const diameter = Math.max(btn.clientWidth, btn.clientHeight);
+            const radius = diameter / 2;
+            const rect = btn.getBoundingClientRect();
+
+            circle.style.width = circle.style.height = `${diameter}px`;
+            circle.style.left = `${e.clientX - rect.left - radius}px`;
+            circle.style.top = `${e.clientY - rect.top - radius}px`;
+            circle.classList.add('ripple');
+
+            const ripple = btn.getElementsByClassName('ripple')[0];
+            if (ripple) ripple.remove();
+
+            btn.appendChild(circle);
+        });
+
+        // 12. Cursor Spotlight
+        const btnSpotlight = document.getElementById('btn-spotlight');
+        btnSpotlight.addEventListener('mousemove', e => {
+            const rect = btnSpotlight.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            btnSpotlight.style.setProperty('--x', `${x}px`);
+            btnSpotlight.style.setProperty('--y', `${y}px`);
+        });
+
+        // 13. Particle Explosion
+        document.getElementById('btn-particles').addEventListener('click', e => {
+            const x = e.clientX;
+            const y = e.clientY;
+            const colors = ['#f43f5e', '#3b82f6', '#10b981', '#f59e0b', '#a855f7'];
+
+            for (let i = 0; i < 18; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                document.body.appendChild(particle);
+
+                const size = Math.floor(Math.random() * 8 + 6);
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+                particle.style.left = `${x}px`;
+                particle.style.top = `${y}px`;
+
+                const destinationX = (Math.random() - 0.5) * 160;
+                const destinationY = (Math.random() - 0.5) * 160;
+
+                particle.style.setProperty('--dx', `${destinationX}px`);
+                particle.style.setProperty('--dy', `${destinationY}px`);
+
+                setTimeout(() => particle.remove(), 600);
+            }
+        });
+
+        // 14. Loading State Spinner
+        const btnLoading = document.getElementById('btn-loading');
+        btnLoading.addEventListener('click', () => {
+            if (btnLoading.classList.contains('loading')) return;
+            btnLoading.classList.add('loading');
+            setTimeout(() => {
+                btnLoading.classList.remove('loading');
+            }, 2000);
+        });
+
+        // 15. 3D Tilt Effect
+        const btnTilt = document.getElementById('btn-tilt');
+        btnTilt.addEventListener('mousemove', e => {
+            const rect = btnTilt.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+            btnTilt.style.transform = `perspective(300px) rotateX(${-y / 4}deg) rotateY(${x / 4}deg) scale(1.05)`;
+        });
+        btnTilt.addEventListener('mouseleave', () => {
+            btnTilt.style.transform = 'perspective(300px) rotateX(0deg) rotateY(0deg) scale(1)';
+        });
+
+        // 16. Magnetic Effect
+        const btnMag = document.getElementById('btn-magnetic');
+        btnMag.addEventListener('mousemove', e => {
+            const rect = btnMag.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+            btnMag.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
+        });
+        btnMag.addEventListener('mouseleave', () => {
+            btnMag.style.transform = 'translate(0px, 0px)';
+        });
+
+        // 17. Success Feedback State
+        const btnSuccess = document.getElementById('btn-success');
+        btnSuccess.addEventListener('click', () => {
+            const originalText = btnSuccess.innerText;
+            btnSuccess.innerText = '✓ Guardado';
+            btnSuccess.classList.add('success');
+            setTimeout(() => {
+                btnSuccess.innerText = originalText;
+                btnSuccess.classList.remove('success');
+            }, 1800);
+        });
+
+        // 18. Web Audio Synthesizer Sound
+        document.getElementById('btn-sound').addEventListener('click', () => {
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(587.33, ctx.currentTime); // D5 note
+            osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.15); // A5 note
+
+            gain.gain.setValueAtTime(0.3, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15);
+
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+
+            osc.start();
+            osc.stop(ctx.currentTime + 0.15);
+        });
+
+        // 19. Clipboard Copy
+        const btnCopy = document.getElementById('btn-copy');
+        btnCopy.addEventListener('click', () => {
+            navigator.clipboard.writeText(window.location.href);
+            const originalText = btnCopy.innerText;
+            btnCopy.innerText = '¡Copiado!';
+            setTimeout(() => {
+                btnCopy.innerText = originalText;
+            }, 1500);
+        });
+
+        // 20. Incremental Counter
+        let count = 0;
+        const btnCounter = document.getElementById('btn-counter');
+        const countDisplay = document.getElementById('count');
+        btnCounter.addEventListener('click', () => {
+            count++;
+            countDisplay.innerText = count;
+        });
+    </script>
+</body>
+</html>
